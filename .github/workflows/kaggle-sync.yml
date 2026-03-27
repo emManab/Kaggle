@@ -2,7 +2,7 @@ name: Sync Kaggle Notebooks
 
 on:
   schedule:
-    - cron: '0 0 * * *'   # runs daily
+    - cron: '0 0 * * *'   # daily run
   workflow_dispatch:
 
 jobs:
@@ -24,9 +24,11 @@ jobs:
 
     - name: Download notebooks
       run: |
-        mkdir notebooks
+        mkdir -p notebooks
         kaggle kernels list --user ${{ secrets.KAGGLE_USERNAME }} > kernels.txt
-        cat kernels.txt | awk '{print $1}' | while read ref; do
+        
+        # Extract notebook refs and download
+        cat kernels.txt | awk '{print $1}' | grep '/' | while read ref; do
           kaggle kernels pull $ref -p notebooks/
         done
 
