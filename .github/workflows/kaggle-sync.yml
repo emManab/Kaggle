@@ -25,7 +25,7 @@ jobs:
     - name: Download notebooks
       run: |
         mkdir notebooks
-        kaggle kernels list -u ${{ secrets.KAGGLE_USERNAME }} --output kernels.csv
+        kaggle kernels list --user ${{ secrets.KAGGLE_USERNAME }} --csv > kernels.csv
         tail -n +2 kernels.csv | cut -d',' -f1 | while read ref; do
           kaggle kernels pull $ref -p notebooks/
         done
